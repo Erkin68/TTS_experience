@@ -3,6 +3,8 @@ TTS training experience using uzbek language.
 
 Avval C da kompilyatsiya qilish uchun tensorflowni build qilib oldim.
 Bazel versiyasi 3.3.1.
+CUDALib:10.0
+CudNN:7.6
 
 Tacotron - Cpp qismini cmake bilan bajardim:
 1. .//scripts/bootstrap.sh
