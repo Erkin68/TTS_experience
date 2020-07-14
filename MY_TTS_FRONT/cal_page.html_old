@@ -1,0 +1,115 @@
+<html>
+
+<meta charset="UTF-8">
+
+<title>
+ PM / TTS-Demo(use server)
+</title>
+
+<style>
+ body {
+   padding: 16px;
+   font-family: sans-serif;
+   font-size: 14px;
+   color: #444}
+ input {
+   font-size: 14px;
+   padding: 8px 12px;
+   outline: none;
+   border: 1px solid #ddd}
+ input:focus {
+   box-shadow: 0 1px 2px rgba(0,0,0,.15)}
+ p {
+   padding: 12px}
+ button {
+   background: #28d;
+   padding: 9px 14px;
+   margin-left: 8px;
+   border: none;
+   outline: none;
+   color: #fff;
+   font-size: 14px;
+   border-radius: 4px;
+   cursor: pointer;}
+ button:hover {
+   box-shadow: 0 1px 2px rgba(0,0,0,.15);
+   opacity: 0.9;}
+ button:active {
+   background: #29f;}
+ button[disabled] {
+   opacity: 0.4;
+   cursor: default}
+</style>
+
+<body>
+<form>
+  <input id="text" type="text" size="100" placeholder="Enter Text">
+  <button id="button" name="synthesize">
+    Aytib bering.
+  </button>
+</form>
+
+<p id="message"></p>
+
+<audio id="audio" controls autoplay hidden></audio>
+
+<script>
+
+function q(selector){
+  return document.querySelector(selector)}
+
+q('#text').focus()
+q('#button').addEventListener('click', function(e) {
+
+  text = q('#text').value.trim()
+
+  if (text) {
+    q('#message').textContent = 'Sintez jarayoni ...'
+    q('#button').disabled = true
+    q('#audio').hidden = true
+    listener(text)
+  }
+  e.preventDefault()
+  return false
+})
+
+
+
+ function listener(text_) {
+
+ let url = new URL('http://localhost:8008/');
+ url.searchParams.set('my_string', text_);
+
+ //fetch(url)
+ //  .then(res => {
+ //   // the conversion is done in native code
+ //   let base64Str = res.base64();
+ //   // the following conversions are done in js, it's SYNC
+ //   let text = res.text();
+ //   let json = res.json();
+ //   alert(res);
+ //})
+ //   // Status code is not 200
+ //  .catch((errorMessage, statusCode) => {
+ //     alert(errorMessage);// error handling
+ //   })
+
+ //var sampleBytes = new Int8Array(4096);
+
+ var link = document.createElement('a');
+ link.setAttribute('href',url);
+ link.setAttribute('download','download');
+ link.click();
+ document.body.removeChild(link);
+}
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

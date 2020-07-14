@@ -1,0 +1,125 @@
+<html> <!-- Qani PM dagi pytonchi va front-endchilar, html -> cryptosiz variant tayyor,-->
+       <!--Sizlar crypto -> ya'ni HTTPS variantini o'zgartirib yozinglar,ILTIMOS!!!-->
+<meta charset="UTF-8">            <!--meni qo'limdan kelmadi-->
+                                  <!--yana 1 ta kamchiligi, downloaddan so'ng chiqadigan -->
+<title>                           <!--save-as dialogni olib tashlay olmadim......-->
+ PM / TTS-Demo(use server)        <!--shunga ham qarab ko'ringlar, ILTIMOS....----->
+</title>
+
+<style>
+ body {
+   padding: 16px;
+   font-family: sans-serif;
+   font-size: 14px;
+   color: #444}
+ input {
+   font-size: 14px;
+   padding: 8px 12px;
+   outline: none;
+   border: 1px solid #ddd}
+ input:focus {
+   box-shadow: 0 1px 2px rgba(0,0,0,.15)}
+ p {
+   padding: 12px}
+ button {
+   background: #28d;
+   padding: 9px 14px;
+   margin-left: 8px;
+   border: none;
+   outline: none;
+   color: #fff;
+   font-size: 14px;
+   border-radius: 4px;
+   cursor: pointer;}
+ button:hover {
+   box-shadow: 0 1px 2px rgba(0,0,0,.15);
+   opacity: 0.9;}
+ button:active {
+   background: #29f;}
+ button[disabled] {
+   opacity: 0.4;
+   cursor: default}
+</style>
+
+<body>
+<form>
+  <input id="text" type="text" size="100" placeholder="Enter Text">
+  <button id="button" name="synthesize">
+    Aytib bering.
+  </button>
+</form>
+
+<p id="message"></p>
+
+<audio id="audio" controls autoplay hidden></audio>
+
+<script>
+
+function q(selector){
+  return document.querySelector(selector)}
+
+q('#text').focus()
+q('#button').addEventListener('click', function(e) {
+
+  text = q('#text').value.trim()
+
+  if (text) {
+    q('#message').textContent = 'Sintez jarayoni ...'
+    q('#button').disabled = true
+    q('#audio').hidden = true
+    listener(text)
+  }
+  e.preventDefault()
+  return false
+})
+
+
+function listener(text_) {
+
+ let url = new URL('http://localhost:8008/');
+ url.searchParams.set('html_body', encodeRFC5987ValueChars(text_));//my_string
+
+ var link = document.createElement('a');
+ link.setAttribute('href',url);
+ link.setAttribute('download','audio.wav');
+
+ //link.style.display = "none";   save-as ni hech olib tashlay olmadim.
+ //setTimeout(function() {        qani PM dagi spes-pitonchi va front-endchilar, olg'a:
+ //                       self.close();  shunday qilingki, save-as download chiqmasin.
+ //                      }, 500);
+ //
+
+ q('#audio').src = url;
+ link.click();
+ window.URL.revokeObjectURL(url);
+ q('#audio').hidden = false
+ q('#button').disabled = false
+ document.body.removeChild(link);
+}
+
+
+
+//function encodeRFC5987ValueChars (str) {
+//    return encodeURIComponent(str).
+//        // Замечание: хотя RFC3986 резервирует "!", RFC5987 это не делает, так что нам не нужно избегать этого
+//        replace(/['()]/g, escape). // i.e., %27 %28 %29
+//        replace(/\*/g, '%2A').
+//            // Следующее не требуется для кодирования процентов для RFC5987, так что мы можем разрешить немного больше читаемости через провод: |`^
+//            replace(/%(?:7C|60|5E)/g, unescape);
+//}
+function encodeRFC5987ValueChars (str) {
+  var ret_str = '';
+  for(var i=0; i<str.length; i++) {
+    var n = str.charCodeAt(i);
+    ret_str = ret_str + 'x' + n.toString(16);
+  }
+  //alert(ret_str);
+  return ret_str;
+}
+
+
+
+
+</script>
+</body>
+</html>
